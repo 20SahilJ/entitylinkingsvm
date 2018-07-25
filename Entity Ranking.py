@@ -100,7 +100,7 @@ X_train, X_test, y_train, y_test,indices_train, indices_test = train_test_split(
                                                                                 test_size=0.2, random_state=42)
 
 #The SVM classifier is created with a linear kernel
-clf = svm.SVC(kernel='linear', C=0.1, probability=True)
+clf = svm.SVC(kernel='linear', C=0.1)
 #In order to train the classifier, all data must be in 1d or 2d format. Therefore, the y training data is flattened from
 #  2d to 1d, and the x training data is flattened from 3d to 2d.
 y_trainfinal = np.array(y_train).ravel()
