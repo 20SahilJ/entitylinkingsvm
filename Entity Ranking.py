@@ -4,6 +4,7 @@ import matplotlib.pylab as pl
 from sklearn import svm
 from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.feature_extraction.text import TfidfTransformer
+from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.model_selection import train_test_split
 from sklearn import metrics
 import pandas as pd
@@ -38,22 +39,17 @@ fullentitymentiondata = [[[0 for x in range(w)] for y in range(h)]for z in range
 # Vectorize the different entity mentions. Entity is first vectorized, and mentions are vectorized corresponding to the
 # fit of the entity vectorization.
 for i in range (0,num_lines):
-    vectorizer = CountVectorizer()
-    entity = data.iloc[:,0].get(i)
-    entity = entity.split(".") #used to put entity into an array without seperating it
-    entityfit = vectorizer.fit_transform(entity)
+    entity = data.iloc[:, 0].get(i)
+    entity = entity.split(".")  # used to put entity into an array without seperating it
     entitymentions = entitymentionstotal.iloc[i]
+    vectorizer = TfidfVectorizer()
+    entityfit = vectorizer.fit_transform(entity)
     entitymentionfit = vectorizer.transform(entitymentions)
-    entitymentiondata = entitymentionfit.toarray()
-    # apply tfid transform.
-    transformer = TfidfTransformer(smooth_idf=False)
-    tfidf = transformer.fit_transform(entitymentiondata)
-    entitymentiondatatfidf = tfidf.toarray()
-    entitymentiondatatfidfnparray = np.array(entitymentiondatatfidf)
-    #A matrix of zeros is appended to keep size of x data consistent
-    zeroscols = np.zeros((num_mentions, maxentitylen-entitymentiondatatfidfnparray.shape[1]))
-    entitymentiondatatfidfnparray = np.append(entitymentiondatatfidfnparray,zeroscols,1)
-    #the matrix created is saved back into the 3d X data matrix
+    entitymentiondatatfidfnparray = np.array(entitymentionfit.toarray())
+    # A matrix of zeros is appended to keep size of x data consistent
+    zeroscols = np.zeros((num_mentions, maxentitylen - entitymentiondatatfidfnparray.shape[1]))
+    entitymentiondatatfidfnparray = np.append(entitymentiondatatfidfnparray, zeroscols, 1)
+    # the matrix created is saved back into the 3d X data matrix
     fullentitymentiondata[i] = entitymentiondatatfidfnparray
 
 #reads in all y data

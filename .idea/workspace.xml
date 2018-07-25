@@ -21,9 +21,10 @@
       <file leaf-file-name="Entity Ranking.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/Entity Ranking.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="189">
-              <caret line="87" column="3" selection-start-line="87" selection-start-column="3" selection-end-line="87" selection-end-column="3" />
+            <state relative-caret-position="360">
+              <caret line="52" column="25" selection-start-line="52" selection-start-column="25" selection-end-line="52" selection-end-column="25" />
               <folding>
+                <element signature="e#23#41#0" expanded="true" />
                 <element signature="e#4400#4577#1" />
                 <element signature="e#8109#8650#1" />
               </folding>
@@ -37,6 +38,11 @@
         </entry>
       </file>
     </leaf>
+  </component>
+  <component name="FindInProjectRecents">
+    <findStrings>
+      <find>entityfit</find>
+    </findStrings>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -139,7 +145,6 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="23" width="1440" height="806" extended-state="0" />
-    <editor active="true" />
     <layout>
       <window_info content_ui="combo" id="Project" order="1" visible="true" weight="0.25" />
       <window_info anchor="bottom" id="TODO" order="10" />
@@ -210,9 +215,10 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/Entity Ranking.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="189">
-          <caret line="87" column="3" selection-start-line="87" selection-start-column="3" selection-end-line="87" selection-end-column="3" />
+        <state relative-caret-position="360">
+          <caret line="52" column="25" selection-start-line="52" selection-start-column="25" selection-end-line="52" selection-end-column="25" />
           <folding>
+            <element signature="e#23#41#0" expanded="true" />
             <element signature="e#4400#4577#1" />
             <element signature="e#8109#8650#1" />
           </folding>
