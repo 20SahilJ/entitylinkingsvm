@@ -110,7 +110,6 @@ X_trainfinal = np.array(X_train).reshape(newX_traindimension,maxentitylen)
 clf.fit(X_trainfinal, y_trainfinal)
 #From this fit, a coefficient array is extracted which is used in determining the probability that a mention relates to
 #  the corresponding entity
-coef = clf.coef_.ravel() / pl.linalg.norm(clf.coef_)
 #the following represents the creation of the arrays for the storage of the accuracies, precisions, f1 scores, and
 # recall scores of the different entity/mention sets
 y_trues, y_preds = [], []
@@ -121,66 +120,31 @@ for j in range(len(X_test)):
     #get x and y test data for current index
     X_testnew = X_test[j]
     y_testnew = y_test[j]
-    #following 4 lines represents trying to predict probability with the classifier. Directly predicting probability
-    # didn't work as well as the current method
-    #probabilitypreds = clf.predict_proba(X_testnew)
-    #first = np.array(probabilitypreds)[:,0]
-    #second = np.array(probabilitypreds)[:,1]
-    #print(np.hypot(first, second))
 
-    #array to store all the probability scores.
-    npmeasures = [0 for x in range(num_mentions)]
-    #For loop used to calculate probability scores. Note that this for loop calculates the scores pre-scaling. That is,
-    #  these scores are not yet in the range 0-1. For more information about how the probability scores are calculated,
-    # please look at the comment down below.
-    for i in range(num_mentions):
-        npval = np.dot(X_testnew[i],coef)
-        if npval == 1:
-            npmeasure = 1-npval
-        else:
-            npmeasure = 1/(1-npval)
-        npmeasures[i] = npmeasure
-    #Gets the maximum value (and its index in the probability score array) of all the probability scores. This is used
-    # to scale the probability scores into the range 0-1.
-    maxval = np.amax(npmeasures)
-    maxindex = npmeasures.index(maxval)
-    #Sets up a variable that keeps track of the last index of a 1 in the y data. This is used for the different metrics,
-    #  as the metrics are only calculated on elements that are supposed to be 1.
     onesindex = 0
     for i in range(num_mentions):
-        print(X_testnew[i])
-        print(y_testnew[i])
-        # tau, _ = stats.kendalltau(npmeasure, y_testnew[i])
-        npmeasures[i]=npmeasures[i]/maxval
-        #note that the probability score is calculated by taking dot product of both the coefficents determined by the fit
-        # and the given values of the testing data. The npmeasure value is calculated by the formula 1/(1-dotprodvalue)
-        # (in the case that the dotprodvalue is 1, 0 is put as this npmeasure value
-        #  Finally, the npmeasure value is divided by the maximum value to give a range of 0 - 1 for the probability
-        # score.
-        print('Probability Score for mention %s: %.5f' % (i, npmeasures[i]))
-        #Continually adds one to the onesindex while the current value in the y data is a 1.
         if y_testnew[i]==1:
             onesindex = onesindex + 1
-    #Prints a message displaying the predicted mention for the current entity
+
+    y_true = y_testnew[:onesindex]
+    # Use following for a classifier prediction
+    y_pred = clf.predict(X_testnew)
+    y_prednp = y_pred.tolist()
+    maxval = np.amax(y_prednp)
+    maxindex = y_prednp.index(maxval)
+    y_pred = y_pred[:onesindex]
+    y_trues = y_trues + y_true.tolist()
+    y_preds = y_preds + y_pred.tolist()
+    print('Y_true', y_true)
+    print('Y_pred', y_pred)
+
+    #Sets up a variable that keeps track of the last index of a 1 in the y data. This is used for the different metrics,
+    #  as the metrics are only calculated on elements that are supposed to be 1.
     dataindex = indices_test[j]
     print('Predicted mention for entity ' + data.iloc[dataindex,0] + ' is '+ data.iloc[dataindex,maxindex+1])
     #Calculates and prints y_true and y_pred for the metrics. As stated above, these metrics are only calculated on the
     # sections of the predicted and true data that are supposed to be 1s.
-    y_true = y_testnew[:onesindex]
-    y_pred = npmeasures[:onesindex]
-    #Use following for a classifier prediction
-    #y_pred = clf.predict(X_testnew)
-    #y_pred = y_pred[:onesindex]
-    #print('Classifier prediction', y_pred)
-    y_trues = y_trues + y_true.tolist()
-    #Use following lines to set rounding threshold
-    threshold = 0.9
-    y_pred = np.array(y_pred)
-    y_pred[y_pred>=threshold] = 1
-    y_pred[y_pred<threshold] = 0
-    y_preds = y_preds + y_pred.tolist()
-    print('Y_true', y_true)
-    print('Y_pred', y_pred)
+
 
 #Calculates the a mean for each metric and prints them out
 averageaccuracy = metrics.accuracy_score(np.array(y_trues), np.array(y_preds))
