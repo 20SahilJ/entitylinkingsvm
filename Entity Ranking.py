@@ -80,10 +80,12 @@ clf.fit(X_trainfinal, y_trainfinal)
 coef = clf.coef_.ravel() / pl.linalg.norm(clf.coef_)
 #the following represents the creation of the arrays for the storage of the accuracies, precisions, f1 scores, and
 # recall scores of the different entity/mention sets
+'''
 accuracies = [0 for x in range(len(X_test))]
 precisions = [0 for x in range(len(X_test))]
 f1s = [0 for x in range(len(X_test))]
 recalls = [0 for x in range(len(X_test))]
+'''
 y_trues, y_preds = [], []
 #for loop used to perform predictions and metrics. Note that unlike the training data, the X testing data is not
 # flattened into one 2d array(likewise, the y testing data is not flattened into a 1d array). This is done so that
@@ -140,13 +142,16 @@ for j in range(len(X_test)):
     # sections of the predicted and true data that are supposed to be 1s.
     y_true = y_testnew[:onesindex]
     y_pred = npmeasures[:onesindex]
+    y_trues = y_trues + y_true.tolist()
     #Use following lines to set rounding threshold
     threshold = 0.9
     y_pred = np.array(y_pred)
     y_pred[y_pred>=threshold] = 1
     y_pred[y_pred<threshold] = 0
+    y_preds = y_preds + y_pred.tolist()
     print('Y_true', y_true)
     print('Y_pred', y_pred)
+    '''
     #calculates all the metrics and stores them into an array
     accuracy = metrics.accuracy_score(np.array(y_true), y_pred)
     accuracies[j] = accuracy
@@ -160,12 +165,13 @@ for j in range(len(X_test)):
     recall = metrics.recall_score(np.array(y_true), y_pred)
     recalls[j] = recall
     print('Recall: ', recall)
+    '''
 #Calculates the a mean for each metric and prints them out
-averageaccuracy = np.array(accuracies).mean()
+averageaccuracy = metrics.accuracy_score(np.array(y_trues), np.array(y_preds))
 print('Average Accuracy', averageaccuracy)
-averageprecision = np.array(precisions).mean()
+averageprecision = metrics.precision_score(np.array(y_trues), np.array(y_preds))
 print('Average Precision', averageprecision)
-averagef1 = np.array(f1s).mean()
+averagef1 = metrics.f1_score(np.array(y_trues), np.array(y_preds))
 print('Average F1 Score', averagef1)
-averagerecall = np.array(recalls).mean()
+averagerecall = metrics.recall_score(np.array(y_trues), np.array(y_preds))
 print('Average Recall', averagerecall)
