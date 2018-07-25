@@ -84,6 +84,7 @@ accuracies = [0 for x in range(len(X_test))]
 precisions = [0 for x in range(len(X_test))]
 f1s = [0 for x in range(len(X_test))]
 recalls = [0 for x in range(len(X_test))]
+y_trues, y_preds = [], []
 #for loop used to perform predictions and metrics. Note that unlike the training data, the X testing data is not
 # flattened into one 2d array(likewise, the y testing data is not flattened into a 1d array). This is done so that
 # individual entity/mention sets could be analyzed.
