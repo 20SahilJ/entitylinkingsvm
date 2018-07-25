@@ -113,12 +113,6 @@ clf.fit(X_trainfinal, y_trainfinal)
 coef = clf.coef_.ravel() / pl.linalg.norm(clf.coef_)
 #the following represents the creation of the arrays for the storage of the accuracies, precisions, f1 scores, and
 # recall scores of the different entity/mention sets
-'''
-accuracies = [0 for x in range(len(X_test))]
-precisions = [0 for x in range(len(X_test))]
-f1s = [0 for x in range(len(X_test))]
-recalls = [0 for x in range(len(X_test))]
-'''
 y_trues, y_preds = [], []
 #for loop used to perform predictions and metrics. Note that unlike the training data, the X testing data is not
 # flattened into one 2d array(likewise, the y testing data is not flattened into a 1d array). This is done so that
@@ -127,7 +121,6 @@ for j in range(len(X_test)):
     #get x and y test data for current index
     X_testnew = X_test[j]
     y_testnew = y_test[j]
-
     #following 4 lines represents trying to predict probability with the classifier. Directly predicting probability
     # didn't work as well as the current method
     #probabilitypreds = clf.predict_proba(X_testnew)
@@ -175,6 +168,10 @@ for j in range(len(X_test)):
     # sections of the predicted and true data that are supposed to be 1s.
     y_true = y_testnew[:onesindex]
     y_pred = npmeasures[:onesindex]
+    #Use following for a classifier prediction
+    #y_pred = clf.predict(X_testnew)
+    #y_pred = y_pred[:onesindex]
+    #print('Classifier prediction', y_pred)
     y_trues = y_trues + y_true.tolist()
     #Use following lines to set rounding threshold
     threshold = 0.9
@@ -184,21 +181,7 @@ for j in range(len(X_test)):
     y_preds = y_preds + y_pred.tolist()
     print('Y_true', y_true)
     print('Y_pred', y_pred)
-    '''
-    #calculates all the metrics and stores them into an array
-    accuracy = metrics.accuracy_score(np.array(y_true), y_pred)
-    accuracies[j] = accuracy
-    print('Accuracy: ', accuracy)
-    precision = metrics.precision_score(np.array(y_true), y_pred)
-    precisions[j] = precision
-    print('Precision: ', precision)
-    f1 = metrics.f1_score(np.array(y_true),y_pred)
-    f1s[j] = f1
-    print('F1 Score: ', f1)
-    recall = metrics.recall_score(np.array(y_true), y_pred)
-    recalls[j] = recall
-    print('Recall: ', recall)
-    '''
+
 #Calculates the a mean for each metric and prints them out
 averageaccuracy = metrics.accuracy_score(np.array(y_trues), np.array(y_preds))
 print('Accuracy', averageaccuracy)
