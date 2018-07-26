@@ -3,7 +3,7 @@ import numpy as np
 import pandas as pd
 
 #reads in x data from the wes tsv file
-data = pd.read_csv('wes2015.tsv', sep = '\t', header = None, names = ['mentions', 'entities'])
+data = pd.read_csv('neel2014.tsv', sep = '\t', header = None, names = ['mentions', 'entities'])
 #gets a dataframe of only the entities
 entities = data['entities']
 #removes the link part of every entity so that the entity ranker can properly analyze the entities
@@ -92,5 +92,5 @@ for i in range(0, len(nonduplicates)):
 
 
 #Use these lines to write final data to the files. nonduplicates represents the x data and y represents the y data
-nonduplicates.to_csv('newdata.txt', sep = '|', header=None, index=False)
-y.to_csv('newresults.txt', sep = '|', header=None, index=False)
+nonduplicates.to_csv('microposts2014data.txt', sep = '|', header=None, index=False)
+y.to_csv('microposts2014results.txt', sep = '|', header=None, index=False)
